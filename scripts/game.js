@@ -19,6 +19,11 @@ var GameState = {
     this.pig.anchor.setTo(0.5);
     this.pig.scale.setTo(-1, 1);
 
+    this.sheep = this.game.add.sprite(100, 250, 'sheep');
+    this.sheep.scale.setTo(0.5);
+    this.sheep.anchor.setTo(0.5);
+    this.sheep.angle = -45;
+
   },
   update: function() {
 
