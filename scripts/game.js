@@ -3,11 +3,12 @@ var game = new Phaser.Game(640, 360, Phaser.AUTO);
 var GameState = {
   preload: function( ) {
     this.load.image('background', '../images/background.png');
-    this.load.image('chicken', '../images/chicken.png');
-    this.load.image('horse', '../images/horse.png');
-    this.load.image('pig', '../images/pig.png');
-    this.load.image('sheep', '../images/sheep3.png');
     this.load.image('arrow', '../images/arrow.png');
+
+    this.load.spritesheet('chicken', '../images/chicken_spritesheet.png', 131, 200, 3);
+    this.load.spritesheet('horse', '../images/horse_spritesheet.png', 212, 200, 3);
+    this.load.spritesheet('pig', '../images/pig_spritesheet.png', 297, 200, 3);
+    this.load.spritesheet('sheep', '../images/sheep_spritesheet.png', 244, 200, 3);
   },
   create: function() {
 
@@ -33,9 +34,12 @@ var GameState = {
     var animal;
 
     animalData.forEach(function(element) {
-      animal = self.animals.create(-1000, self.game.world.centerY, element.key);
+      animal = self.animals.create(-1000, self.game.world.centerY, element.key, 0);
       animal.customParams = {text: element.text};
       animal.anchor.setTo(0.5);
+
+      // create animal animation
+      animal.animations.add('animate', [0, 1, 2, 1, 0, 1], 3, false);
 
       animal.inputEnabled = true;
       animal.input.pixelPerfectClick = true;
@@ -72,7 +76,8 @@ var GameState = {
   },
 
   switchAnimal: function(sprite, event) {
-    console.log('move animal');
+    //console.log('move animal');
+    sprite.play('animate');
   },
 
   animateAnimal: function(sprite, event) {
