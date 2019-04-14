@@ -55,6 +55,9 @@ var GameState = {
     this.currentAnimal = this.animals.next();
     this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY);
 
+    // show animal text
+    this.showText(this.currentAnimal);
+
     // left arrow
     this.leftArrow = this.game.add.sprite(60, this.game.world.centerY, 'arrow');
     this.leftArrow.anchor.setTo(0.5);
@@ -86,12 +89,15 @@ var GameState = {
     sprite.play('animate');
     sprite.customParams.sound.play()
   },
-  
+
   switchAnimal: function(sprite, event) {
     if(this.isMoving) {
       return false
     }
     this.isMoving = true;
+
+    // hide text
+    this.animalText.visible = false;
 
     var newAnimal, endX;
 
@@ -109,6 +115,7 @@ var GameState = {
     newAnimalMovement.to({ x: this.game.world.centerX }, 1000 );
     newAnimalMovement.onComplete.add(function() {
       this.isMoving = false;
+      this.showText(newAnimal);
     }, this);
     newAnimalMovement.start();
 
@@ -117,6 +124,20 @@ var GameState = {
     currentAnimalMovement.start();
 
     this.currentAnimal = newAnimal;
+  },
+
+  showText: function(animal) {
+    if(!this.animalText) {
+      var style = {
+        font:'bold 30pt Arial',
+        fill: '#D0171B',
+        align: 'center'
+      }
+      this.animalText = this.game.add.text(this.game.width/2, this.game.height * 0.85, '', style);
+      this.animalText.anchor.setTo(0.5);
+    }
+    this.animalText.setText(animal.customParams.text);
+    this.animalText.visible = true;
   }
 
 };
