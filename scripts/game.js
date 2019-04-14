@@ -9,6 +9,12 @@ var GameState = {
     this.load.spritesheet('horse', '../images/horse_spritesheet.png', 212, 200, 3);
     this.load.spritesheet('pig', '../images/pig_spritesheet.png', 297, 200, 3);
     this.load.spritesheet('sheep', '../images/sheep_spritesheet.png', 244, 200, 3);
+
+    // phaser is smart enough to know which sound to play according to platform/browser sniffing
+    this.load.audio('chickenSound', ['../audio/chicken.ogg', '../audio/chicken.mp3']);
+    this.load.audio('horseSound', ['../audio/horse.ogg', '../audio/horse.mp3']);
+    this.load.audio('pigSound', ['../audio/pig.ogg', '../audio/pig.mp3']);
+    this.load.audio('sheepSound', ['../audio/sheep.ogg', '../audio/sheep.mp3']);
   },
   create: function() {
 
@@ -22,10 +28,10 @@ var GameState = {
 
     // group for animals
     var animalData = [
-      {key: 'chicken', text: 'CHICKEN'},
-      {key: 'horse', text: 'HORSE'},
-      {key: 'pig', text: 'PIG'},
-      {key: 'sheep', text: 'SHEEP'}
+      {key: 'chicken', text: 'CHICKEN', audio: 'chickenSound'},
+      {key: 'horse', text: 'HORSE', audio: 'horseSound'},
+      {key: 'pig', text: 'PIG', audio: 'pigSound'},
+      {key: 'sheep', text: 'SHEEP', audio: 'sheepSound'}
     ];
 
     this.animals = this.game.add.group();
@@ -35,7 +41,7 @@ var GameState = {
 
     animalData.forEach(function(element) {
       animal = self.animals.create(-1000, self.game.world.centerY, element.key, 0);
-      animal.customParams = {text: element.text};
+      animal.customParams = {text: element.text, sound: self.game.add.audio(element.audio)};
       animal.anchor.setTo(0.5);
 
       // create animal animation
@@ -75,14 +81,12 @@ var GameState = {
 
   },
 
-  switchAnimal: function(sprite, event) {
-    //console.log('move animal');
-    sprite.play('animate');
-  },
-
   animateAnimal: function(sprite, event) {
-    console.log('anime animal')
+    //console.log('anime animal')
+    sprite.play('animate');
+    sprite.customParams.sound.play()
   },
+  
   switchAnimal: function(sprite, event) {
     if(this.isMoving) {
       return false
